@@ -1,20 +1,19 @@
 var splice = Array.prototype.splice;
 
 var opts = {
-  pause_time: 300
+  pause_time: 600
 };
 
 var run = function () {
 
   var item, ul,
-    items = document.querySelectorAll('li'),
-    firstItem = items[0],
-    lastItem = items[items.length - 1];
+    allItems = document.querySelectorAll('li'),
+    firstItem = allItems[0],
+    lastItem = allItems[allItems.length - 1],
+    items = splice.call(allItems, 1, allItems.length - 1);
 
-  items = splice.call(items, 1, items.length - 1);
   item = items[0];
   ul = document.querySelector('ul');
-
 
   /* Position the preview area */
 
@@ -34,8 +33,23 @@ var run = function () {
 
 
   /* Determine which element is inside the preview area */
+  
   var findPreviewedItem = function () {
     console.log('You stopped scrolling. Lets find the previewed item...');
+
+    var i = 0, allItemsLen = allItems.length , distScrolledToTarget, itemHeights = 0, targetElem;
+    
+    distScrolledToTarget = ul.scrollTop + previewAreaTop - (previewArea.offsetHeight / 2);
+    
+    for (i; i < allItemsLen; i++) {
+        itemHeights += allItems[i].offsetHeight;
+        if (distScrolledToTarget < itemHeights) {
+            targetElem = allItems[i];
+            break;
+        }
+    }
+
+    console.log('Distance from top ', itemHeights, targetElem, "amount scrolled: ", distScrolledToTarget);
   };
 
   /* Detect when the user pauses or stops scrolling */

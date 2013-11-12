@@ -44,7 +44,7 @@ li:last-child {
 }
 
 .preview-area {
-  background: red;
+  background: #f2f2f2;
   width: 155px;
   left: 5px;
   position: absolute;
