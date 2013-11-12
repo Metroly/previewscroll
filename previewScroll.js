@@ -33,9 +33,14 @@ var run = function () {
   lastItem.style.marginBottom = boundaryOffset + 'px';
 
 
-  /* Determine which element is currently inside the preview area */
+  /* Determine which element is inside the preview area */
+  var findPreviewedItem = function () {
+    console.log('You stopped scrolling. Lets find the previewed item...');
+  };
 
-  var paused = false, timeoutId, prevScroll;
+  /* Detect when the user pauses or stops scrolling */
+
+  var timeoutId, prevScroll;
 
   ul.addEventListener('scroll', function (evt) {
     var currScroll = ul.scrollTop;
@@ -52,7 +57,7 @@ var run = function () {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(function () {
       if (prevScroll === currScroll) {
-        console.log('Stopped scrolling');
+        findPreviewedItem();
       }
     }, opts.pause_time);
 
