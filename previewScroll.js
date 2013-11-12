@@ -1,5 +1,9 @@
 var splice = Array.prototype.splice;
 
+var opts = {
+  pause_time: 300
+};
+
 var run = function () {
 
   var item, ul,
@@ -31,10 +35,29 @@ var run = function () {
 
   /* Determine which element is currently inside the preview area */
 
-  ul.addEventListener('scroll', function () {
+  var paused = false, timeoutId, prevScroll;
 
+  ul.addEventListener('scroll', function (evt) {
+    var currScroll = ul.scrollTop;
+
+    if (!prevScroll) {
+      prevScroll = currScroll;
+      return;
+    }
+
+    if (prevScroll === currScroll) {
+      return;
+    }
+
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(function () {
+      if (prevScroll === currScroll) {
+        console.log('Stopped scrolling');
+      }
+    }, opts.pause_time);
+
+    prevScroll = currScroll;
   });
-
 };
 
 document.addEventListener('DOMContentLoaded', run);
