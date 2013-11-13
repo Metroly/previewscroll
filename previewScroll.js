@@ -1,7 +1,7 @@
 var splice = Array.prototype.splice;
 
 var opts = {
-  pause_time: 600
+  pause_time: 200
 };
 
 var run = function () {
@@ -21,15 +21,16 @@ var run = function () {
   var previewArea = document.querySelector('.preview-area');
   previewArea.style.height = item.offsetHeight + 'px';
 
-  var previewAreaTop = (ulHeight - previewArea.clientHeight) / 2;
+  var previewAreaTop = (ulHeight - previewArea.offsetHeight) / 2;
   var midDistance = ul.offsetTop + previewAreaTop;
   previewArea.style.top = midDistance + 'px';
 
   /* Ensure scroll boundaries do not exceed first and last items */
 
-  var boundaryOffset = previewAreaTop - firstItem.offsetHeight;
-  firstItem.style.marginTop =   boundaryOffset + 'px';
-  lastItem.style.marginBottom = boundaryOffset + 'px';
+  var boundaryOffsetFirstItem = previewAreaTop - firstItem.offsetHeight;
+  var boundaryOffsetLastItem = previewAreaTop - lastItem.offsetHeight;
+  firstItem.style.marginTop =   boundaryOffsetFirstItem + 'px';
+  lastItem.style.marginBottom =  boundaryOffsetLastItem + 'px';
 
 
   /* Determine which element is inside the preview area */
@@ -68,12 +69,12 @@ var run = function () {
       return;
     }
 
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(function () {
-      if (prevScroll === currScroll) {
-        findPreviewedItem();
-      }
-    }, opts.pause_time);
+    // clearTimeout(timeoutId);
+    // timeoutId = setTimeout(function () {
+    //   if (prevScroll === currScroll) {
+    //     findPreviewedItem();
+    //   }
+    // }, opts.pause_time);
 
     prevScroll = currScroll;
   });
