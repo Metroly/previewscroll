@@ -1,3 +1,5 @@
+(function () {
+
 var splice = Array.prototype.splice;
 
 var opts = {
@@ -49,8 +51,8 @@ var run = function () {
       currStyle = currElem.style;
 
       itemHeights += currElem.offsetHeight;
-      itemHeights += currElemStyle.marginTop ? parseInt(currStyle.marginTop) : 0;
-      itemHeights += currElemStyle.marginBottom ? parseInt(currStyle.marginBottom) : 0;
+      itemHeights += currStyle.marginTop ? parseInt(currStyle.marginTop) : 0;
+      itemHeights += currStyle.marginBottom ? parseInt(currStyle.marginBottom) : 0;
 
       if (distToTarget < itemHeights) {
           targetElem = currElem;
@@ -58,8 +60,17 @@ var run = function () {
       }
     }
 
-    console.log('Preview target ', targetElem);
+    console.log(targetElem);
+    return targetElem;
   };
+
+  /**
+   * @private
+   * Snaps the target item to the bounds of the previewed area.
+   */
+   var snapToPreviewArea = function (elem) {
+      throw new Error('Not implemented');
+   };
 
   /* Detect when the user pauses or stops scrolling */
 
@@ -89,3 +100,5 @@ var run = function () {
 };
 
 document.addEventListener('DOMContentLoaded', run);
+
+} ());
