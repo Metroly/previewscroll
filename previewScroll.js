@@ -1,7 +1,7 @@
 var splice = Array.prototype.splice;
 
 var opts = {
-  pause_time: 200
+  pause_time: 300
 };
 
 var run = function () {
@@ -10,7 +10,8 @@ var run = function () {
     allItems = document.querySelectorAll('li'),
     firstItem = allItems[0],
     lastItem = allItems[allItems.length - 1],
-    items = splice.call(allItems, 1, allItems.length - 1);
+    allItemsLen = allItems.length,
+    items = splice.call(allItems, 1, allItemsLen - 1);
 
   item = items[0];
   ul = document.querySelector('ul');
@@ -32,25 +33,32 @@ var run = function () {
   firstItem.style.marginTop =   boundaryOffsetFirstItem + 'px';
   lastItem.style.marginBottom =  boundaryOffsetLastItem + 'px';
 
-
-  /* Determine which element is inside the preview area */
-  
+  /*
+   * @private
+   * Determines which element is inside the preview area.
+   * Returns Element obj of the item being previewed.
+   */
   var findPreviewedItem = function () {
-    console.log('You stopped scrolling. Lets find the previewed item...');
+    var i = 0, distScrolledToTarget, itemHeights = 0, targetElem, currElem,
+      currElemStyle;
 
-    var i = 0, allItemsLen = allItems.length , distScrolledToTarget, itemHeights = 0, targetElem;
-    
-    distScrolledToTarget = ul.scrollTop + previewAreaTop - (previewArea.offsetHeight / 2);
-    
+    distToTarget = ul.scrollTop + (.5 * ul.offsetHeight);
+
     for (i; i < allItemsLen; i++) {
-        itemHeights += allItems[i].offsetHeight;
-        if (distScrolledToTarget < itemHeights) {
-            targetElem = allItems[i];
-            break;
-        }
+      currElem = allItems[i];
+      currStyle = currElem.style;
+
+      itemHeights += currElem.offsetHeight;
+      itemHeights += currElemStyle.marginTop ? parseInt(currStyle.marginTop) : 0;
+      itemHeights += currElemStyle.marginBottom ? parseInt(currStyle.marginBottom) : 0;
+
+      if (distToTarget < itemHeights) {
+          targetElem = currElem;
+          break;
+      }
     }
 
-    console.log('Distance from top ', itemHeights, targetElem, "amount scrolled: ", distScrolledToTarget);
+    console.log('Preview target ', targetElem);
   };
 
   /* Detect when the user pauses or stops scrolling */
@@ -69,12 +77,12 @@ var run = function () {
       return;
     }
 
-    // clearTimeout(timeoutId);
-    // timeoutId = setTimeout(function () {
-    //   if (prevScroll === currScroll) {
-    //     findPreviewedItem();
-    //   }
-    // }, opts.pause_time);
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(function () {
+      if (prevScroll === currScroll) {
+        findPreviewedItem();
+      }
+    }, opts.pause_time);
 
     prevScroll = currScroll;
   });
