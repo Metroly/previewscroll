@@ -25,7 +25,6 @@ var run = function () {
   previewArea.style.height = item.offsetHeight + 'px';
 
   var previewAreaTop = (ulHeight - previewArea.offsetHeight) / 2;
-  var previewAreaBottom = previewAreaTop + (previewArea.offsetHeight);
   var midDistance = ul.offsetTop + previewAreaTop;
   previewArea.style.top = midDistance + 'px';
 
@@ -50,7 +49,7 @@ var run = function () {
   /*
    * @private
    * Determines which element is inside the preview area.
-   * Returns Element obj of the item being previewed.
+   * Returns {Element} the item being previewed.
    */
   var findPreviewedItem = function () {
     var i = 0, distToTarget, itemHeights = 0, targetElem, currElem, currStyle;
@@ -62,8 +61,8 @@ var run = function () {
       currStyle = currElem.style;
 
       itemHeights += currElem.offsetHeight;
-      itemHeights += currStyle.marginTop ? parseInt(currStyle.marginTop) : 0;
-      itemHeights += currStyle.marginBottom ? parseInt(currStyle.marginBottom) : 0;
+      itemHeights += currStyle.marginTop ? parseInt(currStyle.marginTop, 10) : 0;
+      itemHeights += currStyle.marginBottom ? parseInt(currStyle.marginBottom, 10) : 0;
 
       if (distToTarget < itemHeights) {
           targetElem = currElem;
@@ -74,7 +73,6 @@ var run = function () {
     return targetElem;
   };
 
- 
   /* Detect when the user pauses or stops scrolling */
 
   var timeoutId, prevScroll;
