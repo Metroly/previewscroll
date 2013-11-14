@@ -17,7 +17,7 @@ var run = function () {
 
   item = items[0];
   ul = document.querySelector('ul');
-
+  
   /* Position the preview area */
 
   var ulHeight = ul.clientHeight;
@@ -25,6 +25,7 @@ var run = function () {
   previewArea.style.height = item.offsetHeight + 'px';
 
   var previewAreaTop = (ulHeight - previewArea.offsetHeight) / 2;
+  var previewAreaBottom = previewAreaTop + (previewArea.offsetHeight);
   var midDistance = ul.offsetTop + previewAreaTop;
   previewArea.style.top = midDistance + 'px';
 
@@ -35,16 +36,26 @@ var run = function () {
   firstItem.style.marginTop =   boundaryOffsetFirstItem + 'px';
   lastItem.style.marginBottom =  boundaryOffsetLastItem + 'px';
 
+
+  /* Snap to preview position when the user touches/clicks away. */
+
+  ul.addEventListener('mouseup', function () {
+    var target = findPreviewedItem();
+    var targetTop = target.offsetTop - ul.scrollTop;
+    var prevAreaTop = previewArea.offsetTop - ul.offsetTop;
+
+    ul.scrollTop += (targetTop - prevAreaTop);
+  });
+
   /*
    * @private
    * Determines which element is inside the preview area.
    * Returns Element obj of the item being previewed.
    */
   var findPreviewedItem = function () {
-    var i = 0, distScrolledToTarget, itemHeights = 0, targetElem, currElem,
-      currElemStyle;
+    var i = 0, distToTarget, itemHeights = 0, targetElem, currElem, currStyle;
 
-    distToTarget = ul.scrollTop + (.5 * ul.offsetHeight);
+    distToTarget = ul.scrollTop + (ul.offsetHeight / 2);
 
     for (i; i < allItemsLen; i++) {
       currElem = allItems[i];
@@ -60,23 +71,15 @@ var run = function () {
       }
     }
 
-    console.log(targetElem);
     return targetElem;
   };
 
-  /**
-   * @private
-   * Snaps the target item to the bounds of the previewed area.
-   */
-   var snapToPreviewArea = function (elem) {
-      throw new Error('Not implemented');
-   };
-
+ 
   /* Detect when the user pauses or stops scrolling */
 
   var timeoutId, prevScroll;
 
-  ul.addEventListener('scroll', function (evt) {
+  ul.addEventListener('scroll', function (evt) {      
     var currScroll = ul.scrollTop;
 
     if (!prevScroll) {
