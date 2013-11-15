@@ -1,8 +1,8 @@
 /*global requestAnimationFrame */
 /*global cancelAnimationFrame */
 
-(function () {
-  // "use strict";
+(function (root) {
+  "use strict";
 
   var noop, splice, query, queryAll, extend, defaultOpts, PreviewScroll;
 
@@ -228,5 +228,5 @@
     this.ensureScrollBoundaries();
   };
 
-  this.PreviewScroll = PreviewScroll;
-}());
+  root.PreviewScroll = PreviewScroll;
+}(this));

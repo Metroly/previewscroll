@@ -1,5 +1,4 @@
 ul {
-  /*height: 350px;*/
   overflow: auto;
   width: 168px;
   margin: 0;
@@ -7,6 +6,7 @@ ul {
   z-index: 2;
   position: relative;
   background: transparent;
+  -webkit-overflow-scrolling: touch;
 }
 
 li {
