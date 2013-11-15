@@ -2,7 +2,7 @@
 /*global cancelAnimationFrame */
 
 (function () {
-  "use strict";
+  // "use strict";
 
   var noop, splice, query, queryAll, extend, defaultOpts, PreviewScroll;
 
