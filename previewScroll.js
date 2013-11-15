@@ -1,9 +1,10 @@
-/* global requestAnimationFrame*/
-/* global cancelAnimationFrame*/
+/*global requestAnimationFrame */
+/*global cancelAnimationFrame */
 
 (function () {
+  "use strict";
 
-  var noop, slice, query, queryAll, extend, PreviewScroll;
+  var noop, splice, query, queryAll, extend, defaultOpts, PreviewScroll;
 
   /* Some helpers */
 
@@ -21,16 +22,16 @@
 
   extend = function (baseObj, childObj) {
     var k;
-    for (k in opts) {
-      if (opts.hasOwnProperty(k)) {
-        defaultOpts[k] = opts[k];
+    for (k in childObj) {
+      if (childObj.hasOwnProperty(k)) {
+        baseObj[k] = childObj[k];
       }
     }
-  }
+  };
 
   /* Overrideable defaults */
 
-  var defaultOpts = {
+  defaultOpts = {
     pause_time: 300
   };
 
@@ -64,12 +65,13 @@
     this.allItemsLen = this.allItems.length;
     this.firstItem = this.allItems[0];
     this.lastItem = this.allItems[this.allItemsLen - 1];
-    this.items = splice.call(this.allItems, 1, this.allItemsLen - 1),
+    this.items = splice.call(this.allItems, 1, this.allItemsLen - 1);
     this.item = this.items[0];
     this.previewArea = query('.preview-area');
   };
 
   /**
+   * @private
    * Creates the preview area and inserts it into the DOM.
    */
   PreviewScroll.prototype.createPreviewArea = function () {
@@ -138,7 +140,7 @@
 
     distToTarget = ul.scrollTop + (ul.offsetHeight / 2);
 
-    for (i; i < allItemsLen; i++) {
+    for (i; i < allItemsLen; i += 1) {
       currElem = allItems[i];
       currStyle = currElem.style;
 
@@ -147,8 +149,8 @@
       itemHeights += currStyle.marginBottom ? parseInt(currStyle.marginBottom, 10) : 0;
 
       if (distToTarget < itemHeights) {
-          targetElem = currElem;
-          break;
+        targetElem = currElem;
+        break;
       }
     }
 
@@ -160,7 +162,8 @@
    * Snaps the previewed item within the bounds of the preview area.
    */
   PreviewScroll.prototype.snapToPreviewArea = function () {
-    var animationId,
+    var scrollAnimation,
+      animationId,
       self = this,
       target = self.findPreviewedItem(),
       targetTop = target.offsetTop - self.ul.scrollTop,
@@ -168,7 +171,7 @@
       compensate = targetTop - prevAreaTop,
       cycleCount = 0;
 
-    var scrollAnimation = function () {
+    scrollAnimation = function () {
       if (cycleCount >= Math.abs(compensate)) {
         cancelAnimationFrame(animationId);
         return;
@@ -189,7 +192,7 @@
   PreviewScroll.prototype.listenToScrollPauses = function () {
     var self = this, ul = this.ul, timeoutId, prevScroll;
 
-    ul.addEventListener('scroll', function (evt) {
+    ul.addEventListener('scroll', function () {
       var currScroll = ul.scrollTop;
 
       if (!prevScroll) {
