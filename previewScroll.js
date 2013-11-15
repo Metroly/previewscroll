@@ -1,3 +1,6 @@
+/* global requestAnimationFrame*/
+/* global cancelAnimationFrame*/
+
 (function () {
 
   var splice = Array.prototype.splice;
@@ -8,7 +11,7 @@
   
   var bind = function (fn, ctx) {
       return function () {
-        fn.apply(ctx, arguments)  
+        fn.apply(ctx, arguments);
       };
   };
   
@@ -42,11 +45,13 @@
    */
   PreviewScroll.prototype.createPreviewArea = function () {
     var wrapDiv = document.createElement('div'),
-      previewAreaDiv = document.createElement('div');
+      previewAreaDiv = document.createElement('div'),
+      clonedNode = this.ul.cloneNode(true);
+      
       previewAreaDiv.classList.add('preview-area');
       
       wrapDiv.appendChild(previewAreaDiv);
-      wrapDiv.appendChild(this.ul.cloneNode());
+      wrapDiv.appendChild(clonedNode);
       
       var parentNode = this.ul.parentNode;
       parentNode.replaceChild(wrapDiv, this.ul);
@@ -54,10 +59,9 @@
   
   /**
    * @private
-   * 
+   * TODO Break up this run method.
    */
   PreviewScroll.prototype.run = function () {
-  
     var item, self = this, ul = this.ul,
       allItems = document.querySelectorAll('li'),
       firstItem = allItems[0],
@@ -89,15 +93,28 @@
     /* Snap to preview position when the user touches/clicks away. */
   
     var snapToPreviewPosition = function () {
-      var target = findPreviewedItem();
-      var targetTop = target.offsetTop - ul.scrollTop;
-      var prevAreaTop = previewArea.offsetTop - ul.offsetTop;
-  
-      ul.scrollTop += (targetTop - prevAreaTop);
+        
+      console.log('Snap to preview psoition');
+        
+      var animationId,
+        target = findPreviewedItem(),
+        targetTop = target.offsetTop - ul.scrollTop,
+        prevAreaTop = previewArea.offsetTop - ul.offsetTop,
+        compensate = targetTop - prevAreaTop,
+        cycleCount = 0;
+
+      var scrollAnimation = function () {
+        if (cycleCount >= Math.abs(compensate)) {
+          cancelAnimationFrame(animationId);
+          return;
+        }
+        ul.scrollTop += (compensate < 0) ? -1 : 1;
+        cycleCount += 1;
+        animationId = requestAnimationFrame(scrollAnimation);
+      };
+    
+      animationId = requestAnimationFrame(scrollAnimation);
     };
-  
-    ul.addEventListener('touchend', snapToPreviewPosition);
-    ul.addEventListener('mouseup', snapToPreviewPosition);
   
     /*
      * Determines which element is inside the preview area.
@@ -145,23 +162,18 @@
       timeoutId = setTimeout(function () {
         if (prevScroll === currScroll) {
           self.onPreview(findPreviewedItem());
+          snapToPreviewPosition();
         }
       }, defaultOpts.pause_time);
   
       prevScroll = currScroll;
     });
   };
-
-    this.PreviewScroll = PreviewScroll;
+  
+  PreviewScroll.prototype.updateLayout = function () {
+    this.run();
+  };
+  
+  this.PreviewScroll = PreviewScroll;
 
 } ());
-
-
-/* global PreviewScroll*/
-
-document.addEventListener('DOMContentLoaded', function () {
-    var previewScroll = new PreviewScroll('#preview-scroll');
-    previewScroll.onPreview = function (target) {
-        console.log('You previewed ', target);
-    };
-});

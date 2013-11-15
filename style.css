@@ -1,9 +1,7 @@
 ul {
-  height: 800px;
   overflow: auto;
   width: 168px;
   margin: 0;
-  margin-top: 100px;
   padding: 0;
   z-index: 2;
   position: relative;
@@ -46,6 +44,5 @@ li:last-child {
 .preview-area {
   background: #eee;
   width: 155px;
-  left: 5px;
   position: absolute;
 }
