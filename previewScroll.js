@@ -1,5 +1,8 @@
-/*global requestAnimationFrame */
-/*global cancelAnimationFrame */
+/*
+ * PreviewScroll
+ * http://github.com/metroly/previewscroll
+ * @license MIT
+ */
 
 (function (root) {
   "use strict";
