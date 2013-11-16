@@ -23,7 +23,11 @@ Let PreviewScroll know which list to target and add an event handler for the pre
 
 ```js
 
-var demoScroll = new PreviewScroll('#demoScroll');
+var options = {
+  pause_time: 300 // How long to wait before an item is considered as being previewed.
+};
+
+var demoScroll = new PreviewScroll('#demoScroll', options);
 
 demoScroll.onPreview = function (previewedElement) {
   console.log('The previewed item is ', previewedElement);
