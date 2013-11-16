@@ -125,7 +125,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
       enforceListHeight();
-      previewScroll = new PreviewScroll('#scrollDemo');
+      previewScroll = new PreviewScroll('#scrollDemo', {pause_time: 200, offset_items: 1});
       previewScroll.onPreview = function (target) {
         document.querySelector('.status').innerHTML = target.textContent;
       };

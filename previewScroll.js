@@ -7,7 +7,7 @@
 (function (root) {
   "use strict";
 
-  var noop, splice, query, queryAll, extend, defaultOpts, PreviewScroll;
+  var noop, splice, query, queryAll, extend, defaultOpts, clone, PreviewScroll;
 
   /* Some helpers */
 
@@ -23,19 +23,32 @@
     return document.querySelectorAll.call(document, q);
   };
 
+  clone = function (baseObj) {
+    return JSON.parse(JSON.stringify(baseObj));
+  }
+
   extend = function (baseObj, childObj) {
     var k;
+
+    baseObj = clone(baseObj);
+
     for (k in childObj) {
       if (childObj.hasOwnProperty(k)) {
         baseObj[k] = childObj[k];
       }
     }
+
+    console.log(defaultOpts);
+    console.log(baseObj);
+
+    return baseObj;
   };
 
   /* Overrideable defaults */
 
   defaultOpts = {
-    pause_time: 300
+    pause_time: 300,
+    offset_items: 0
   };
 
   /**
@@ -46,7 +59,7 @@
     this.el = listId;
 
     if (opts) {
-      extend(defaultOpts, opts);
+      this.opts = extend(defaultOpts, opts);
     }
 
     this.createPreviewArea();
@@ -68,7 +81,7 @@
     this.allItemsLen = this.allItems.length;
     this.firstItem = this.allItems[0];
     this.lastItem = this.allItems[this.allItemsLen - 1];
-    this.items = splice.call(this.allItems, 1, this.allItemsLen - 1);
+    this.items = splice.call(this.allItems, this.opts.offset_items, this.allItemsLen - this.opts.offset_items);
     this.item = this.items[0];
     this.previewArea = query('.preview-area');
   };
@@ -126,8 +139,14 @@
     var previewAreaTop = this.previewAreaTop,
       firstItem = this.firstItem,
       lastItem = this.lastItem,
-      boundaryOffsetFirstItem = previewAreaTop - firstItem.offsetHeight,
-      boundaryOffsetLastItem = previewAreaTop - lastItem.offsetHeight;
+      offsetItems = this.opts.offset_items,
+      boundaryOffsetFirstItem = previewAreaTop,
+      boundaryOffsetLastItem = previewAreaTop;
+
+    if (offsetItems !== 0) {
+      boundaryOffsetFirstItem -= firstItem.offsetHeight * offsetItems,
+      boundaryOffsetLastItem -= lastItem.offsetHeight * offsetItems;
+    }
 
     firstItem.style.marginTop =   boundaryOffsetFirstItem + 'px';
     lastItem.style.marginBottom =  boundaryOffsetLastItem + 'px';
