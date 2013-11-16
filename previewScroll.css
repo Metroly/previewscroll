@@ -1,4 +1,9 @@
-ul {
+.preview-area {
+  background: #F2F2F2;
+  position: absolute;
+}
+
+ul.preview-scroll {
   overflow: auto;
   width: 168px;
   margin: 0;
@@ -9,7 +14,7 @@ ul {
   -webkit-overflow-scrolling: touch;
 }
 
-li {
+.preview-scroll li {
   margin: 0;
   width: 150px;
   text-align: center;
@@ -23,27 +28,21 @@ li {
   list-style: none;
 }
 
-li:hover {
+.preview-scroll li:hover {
   cursor: pointer;
 }
 
-li:first-child {
+.preview-scroll li:first-child {
   border-top:none;
   padding: 40px 0;
   color:#aaa;
   cursor: default;
 }
 
-li:last-child {
+.preview-scroll li:last-child {
   border-bottom: 1px solid #c0c0c0;
   border-bottom: none;
   padding: 40px 0;
   color:#aaa;
   cursor: default;
-}
-
-.preview-area {
-  background: #eee;
-  width: 155px;
-  position: absolute;
 }

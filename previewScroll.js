@@ -81,6 +81,7 @@
       tempUl = query(this.el),
       clonedUlNode = tempUl.cloneNode(true);
 
+    clonedUlNode.classList.add('preview-scroll');
     previewAreaDiv.classList.add('preview-area');
 
     wrappingDiv.appendChild(previewAreaDiv);
@@ -105,6 +106,8 @@
       midDistance;
 
     previewArea.style.height = item.offsetHeight + 'px';
+    previewArea.style.width = item.offsetWidth + 'px';
+    previewArea.style.position = 'absolute';
 
     this.previewAreaTop = (ulHeight - previewArea.offsetHeight) / 2;
 
