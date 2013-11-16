@@ -35,7 +35,7 @@ ul.preview-scroll {
 .preview-scroll li:first-child {
   border-top:none;
   padding: 40px 0;
-  color:#aaa;
+  color: #aaa;
   cursor: default;
 }
 
@@ -43,6 +43,6 @@ ul.preview-scroll {
   border-bottom: 1px solid #c0c0c0;
   border-bottom: none;
   padding: 40px 0;
-  color:#aaa;
+  color: #aaa;
   cursor: default;
 }
